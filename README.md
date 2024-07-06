@@ -39,6 +39,14 @@ npm test
 
 ```
 
+- Run the unit testing
+
+```bash
+
+npm run build
+
+```
+
 
 ## Technologies Used
 
