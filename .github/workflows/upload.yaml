@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v4.0.2
         with:
           key: ${{ github.sha }}-next-build-file
-          path: ./.next
+          path: ./out
 
       - name: Restore Package Manager
         if: steps.next-cache.outputs.cache-hit != 'true'
@@ -57,4 +57,4 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Sync to S3
-        run: aws s3 sync ./.next s3://${{ secrets.AWS_S3_BUCKETNAME }} --delete
+        run: aws s3 sync ./out s3://${{ secrets.AWS_S3_BUCKETNAME }} --delete

@@ -37,5 +37,5 @@ jobs:
         uses: actions/cache@v4.0.2
         with:
           key: ${{ github.sha }}-next-build-file
-          path: ./.next
+          path: ./out
         
