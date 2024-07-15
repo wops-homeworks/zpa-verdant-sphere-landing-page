@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build The Project ##Build
+    name: Build The Project
     uses: ./.github/workflows/build.yaml
     with:
       node-version: 18
