@@ -11,7 +11,7 @@ jobs:
     name: Build The Project
     uses: ./.github/workflows/build.yaml
     with:
-      node-version: 18
+      node-version: "18"
 
   # test:
   #   name: Test The Project
