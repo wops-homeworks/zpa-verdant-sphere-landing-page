@@ -2,19 +2,21 @@ name: "Upload Workflow"
 
 on:
   workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_REGION:
+        required: true
+      AWS_S3_BUCKETNAME:
+        required: true
 
 jobs:
   upload:
     name: Upload To S3
     runs-on: ubuntu-latest
     steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      
       - name: Restore The Cache
         id: next-cache
         uses: actions/cache@v4.0.2
@@ -31,6 +33,13 @@ jobs:
       - name: Build
         if: steps.next-cache.outputs.cache-hit != 'true'
         run: npm run build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Sync to S3
         run: aws s3 sync ./.next s3://${{ secrets.AWS_S3_BUCKETNAME }} --delete
