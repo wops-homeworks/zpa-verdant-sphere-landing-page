@@ -36,4 +36,4 @@ jobs:
         uses: aws-actions/s3-sync@v2.2.6
         with:
           source-dir: './next'
-          destination-s3-bucket: 'YOUR_BUCKET_NAME'
+          destination-s3-bucket: ${{ secrets.AWS_S3_BUCKETNAME }}
