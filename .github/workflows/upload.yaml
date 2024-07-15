@@ -14,11 +14,26 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name: Restore The Cache
+        id: next-cache
+        uses: actions/cache@v4.0.2
+        with:
+          key: ${{ github.sha }}-php-vendor-cahce
+          path: ./.next
+
+      - name: Install Dependencies
+        if: steps.next-cache.outputs.cache-hit != 'true'
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.node_version }}
+      
+      - name: Build
+        if: steps.next-cache.outputs.cache-hit != 'true'
+        run: npm run build
 
       - name: Sync to S3
         uses: aws-actions/s3-sync@v2.2.6
         with:
           source-dir: './next'
           destination-s3-bucket: 'YOUR_BUCKET_NAME'
-          destination-s3-prefix: ''
-          bucket-owner-full-control: true
