@@ -41,7 +41,7 @@ jobs:
 
       - name: Nodejs Setup
         if: steps.package-managers-cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4.0.2
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ inputs.node_version }}
       
