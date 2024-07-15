@@ -13,7 +13,7 @@ jobs:
     with:
       node_version: 18
 
-  # test:
-  #   name: Test The Project
-  #   needs: [build]
-  #   uses: ./.github/workflows/test.yaml
+  upload:
+    name: Upload To S3
+    needs: [build]
+    uses: ./.github/workflows/upload.yaml
