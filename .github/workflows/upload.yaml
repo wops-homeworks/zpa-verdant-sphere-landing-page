@@ -2,6 +2,10 @@ name: "Upload Workflow"
 
 on:
   workflow_call:
+    inputs:
+      node_version:
+        required: true
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -20,16 +24,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Restore The Cache
+      - name: Restore Next File Cache
         id: next-cache
         uses: actions/cache@v4.0.2
         with:
-          key: ${{ github.sha }}-next-build-file
+          key: ${{ github.sha }}-next-build-file1
           path: ./.next
 
-      - name: Nodejs Setup
+      - name: Restore Package Manager
         if: steps.next-cache.outputs.cache-hit != 'true'
-        uses: actions/setup-node@v2
+        id: package-managers-cache
+        uses: actions/cache@v4.0.2
+        with:
+          key: ${{ github.sha }}-package-manager
+          path: ~/.npm
+
+      - name: Nodejs Setup
+        if: package-managers-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4.0.2
         with:
           node-version: ${{ inputs.node_version }}
       
