@@ -1,0 +1,19 @@
+name: "Main Workflow"
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  build:
+    name: Build The Project
+    uses: ./.github/workflows/build.yaml
+    with:
+      node-version: 18
+
+  test:
+    name: Test The Project
+    needs: [build]
+    uses: ./.github/workflows/test.yaml
