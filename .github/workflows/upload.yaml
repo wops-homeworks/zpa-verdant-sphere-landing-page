@@ -17,22 +17,25 @@ jobs:
     name: Upload To S3
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Restore The Cache
         id: next-cache
         uses: actions/cache@v4.0.2
         with:
-          key: ${{ github.sha }}-php-vendor-cahce
+          key: ${{ github.sha }}-next-build-file
           path: ./.next
 
-      - name: Install Dependencies
+      - name: Nodejs Setup
         if: steps.next-cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@v2
         with:
           node-version: ${{ inputs.node_version }}
       
-      - name: Build
+      - name: Install Dependencies & Build
         if: steps.next-cache.outputs.cache-hit != 'true'
-        run: npm run build
+        run: npm install && npm run build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
