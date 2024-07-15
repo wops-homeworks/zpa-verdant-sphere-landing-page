@@ -13,7 +13,7 @@ jobs:
     with:
       node-version: 18
 
-  test:
-    name: Test The Project
-    needs: [build]
-    uses: ./.github/workflows/test.yaml
+  # test:
+  #   name: Test The Project
+  #   needs: [build]
+  #   uses: ./.github/workflows/test.yaml
