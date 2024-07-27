@@ -42,7 +42,7 @@ jobs:
           restore-key: ${{ github.sha }}-package-manager-restore
 
       - name: Nodejs Setup
-        if: steps.package-managers-cache.outputs.cache-hit != 'true' || steps.next-cache.outputs.cache-hit != 'true'
+        if: steps.package-managers-cache.outputs.cache-hit != 'true' && steps.next-cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@v2
         with:
           node-version: ${{ inputs.node_version }}
