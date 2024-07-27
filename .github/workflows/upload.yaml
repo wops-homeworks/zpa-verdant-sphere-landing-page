@@ -28,7 +28,7 @@ jobs:
         id: next-cache
         uses: actions/cache@v4.0.2
         with:
-          key: ${{ github.sha }}-next-build-file
+          key: ${{ github.sha }}-build-file-restore
           path: ./out
 
       - name: Restore Package Manager
@@ -36,11 +36,11 @@ jobs:
         id: package-managers-cache
         uses: actions/cache@v4.0.2
         with:
-          key: ${{ github.sha }}-package-manager
+          key: ${{ github.sha }}-package-manager-restore
           path: ~/.npm
 
       - name: Nodejs Setup
-        if: steps.package-managers-cache.outputs.cache-hit != 'true' && steps.next-cache.outputs.cache-hit != 'true'
+        if: steps.package-managers-cache.outputs.cache-hit != 'true' || steps.next-cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@v2
         with:
           node-version: ${{ inputs.node_version }}
