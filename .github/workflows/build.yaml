@@ -19,11 +19,25 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: node_version
+          node-version: ${{ inputs.node_version }}
+
+      - name: Cache Package Manager
+        uses: actions/cache@v4.0.2
+        with:
+          path: ~/.npm
+          key: ${{ github.sha }}-package-manager
+          restore-key: ${{ github.sha }}-package-manager-restore
 
       - name: Install Dependencies
         run: npm install
 
       - name: Build
         run: npm run build
+
+      - name: Cache The Build File
+        uses: actions/cache@v4.0.2
+        with:
+          key: ${{ github.sha }}-next-build-file
+          path: ./out
+          restore-key: ${{ github.sha }}-build-file-restore
         
