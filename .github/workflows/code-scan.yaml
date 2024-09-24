@@ -26,7 +26,7 @@ jobs:
       with:
         key: ${{ github.sha }}-next-build-file
         path: ./out
-        restore-key: ${{ github.sha }}-build-file-restore
+        restore-keys: ${{ github.sha }}-build-file-restore
 
     - name: Restore Package Manager
       if: steps.next-cache.outputs.cache-hit != 'true'
@@ -35,7 +35,7 @@ jobs:
       with:
         path: ~/.npm
         key: ${{ github.sha }}-package-manager
-        restore-key: ${{ github.sha }}-package-manager-restore
+        restore-keys: ${{ github.sha }}-package-manager-restore
 
     - name: Nodejs Setup
       if: steps.package-managers-cache.outputs.cache-hit != 'true' && steps.next-cache.outputs.cache-hit != 'true'

@@ -6,38 +6,38 @@ on:
       node_version:
         required: true
         type: string
-    
+
 
 jobs:
   build:
     name: Build Next Js App
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-    
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ inputs.node_version }}
+    - name: Checkout
+      uses: actions/checkout@v2
 
-      - name: Cache Package Manager
-        uses: actions/cache@v4.0.2
-        with:
-          path: ~/.npm
-          key: ${{ github.sha }}-package-manager
-          restore-key: ${{ github.sha }}-package-manager-restore
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node_version }}
 
-      - name: Install Dependencies
-        run: npm install
+    - name: Cache Package Manager
+      uses: actions/cache@v4.0.2
+      with:
+        path: ~/.npm
+        key: ${{ github.sha }}-package-manager
+        restore-key: ${{ github.sha }}-package-manager-restore
 
-      - name: Build
-        run: npm run build
+    - name: Install Dependencies
+      run: npm install
 
-      - name: Cache The Build File
-        uses: actions/cache@v4.0.2
-        with:
-          key: ${{ github.sha }}-next-build-file
-          path: ./out
-          restore-key: ${{ github.sha }}-build-file-restore
-        
+    - name: Build
+      run: npm run build
+
+    - name: Cache The Build File
+      uses: actions/cache@v4.0.2
+      with:
+        key: ${{ github.sha }}-next-build-file
+        path: ./out
+        restore-keys: ${{ github.sha }}-build-file-restore
+
