@@ -1,0 +1,54 @@
+name: "Code scan the app"
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        required: true
+        type: string
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      G_TOKEN:
+        required: true
+
+jobs:
+  build:
+    name: Build Next Js App
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Restore Next File Cache
+      id: next-cache
+      uses: actions/cache@v4.0.2
+      with:
+        key: ${{ github.sha }}-next-build-file
+        path: ./out
+        restore-key: ${{ github.sha }}-build-file-restore
+
+    - name: Restore Package Manager
+      if: steps.next-cache.outputs.cache-hit != 'true'
+      id: package-managers-cache
+      uses: actions/cache@v4.0.2
+      with:
+        path: ~/.npm
+        key: ${{ github.sha }}-package-manager
+        restore-key: ${{ github.sha }}-package-manager-restore
+
+    - name: Nodejs Setup
+      if: steps.package-managers-cache.outputs.cache-hit != 'true' && steps.next-cache.outputs.cache-hit != 'true'
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node_version }}
+
+    - name: Install Dependencies & Build
+      if: steps.next-cache.outputs.cache-hit != 'true'
+      run: npm install && npm run build
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.G_TOKEN }} # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
