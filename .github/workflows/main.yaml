@@ -35,7 +35,7 @@ jobs:
 
   upload:
     name: Upload To S3
-    needs: [build, code-scan]
+    needs: [build, code-scan, provision-aws]
     uses: ./.github/workflows/upload.yaml
     with:
       node_version: 18
